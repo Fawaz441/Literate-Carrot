@@ -5,13 +5,13 @@ from django.conf import settings
 class Author(models.Model):
     name = models.CharField(max_length=40)
     image = models.ImageField(null=True,blank=True)
-    slug = models.SlugField()
+    slug = models.SlugField(null=True,blank=True)
 
     def __str__(self):
         return self.name
 
     def save(self,*args,**kwargs):
-        self.slug = stringify(self.name)
+        self.slug = slugify(self.name)
         super().save(*args,**kwargs)
 
 
@@ -21,9 +21,11 @@ class Book(models.Model):
     discount_price = models.FloatField(null=True,blank=True)
     author = models.ForeignKey(Author,on_delete=models.CASCADE,null=True,blank=True)
     image = models.ImageField(null=True,blank=True)
+    slug = models.SlugField(null=True,blank=True)
+
 
     def save(self,*args,**kwargs):
-        self.slug = stringify(self.name)
+        self.slug = slugify(self.title)
         super().save(*args,**kwargs)
 
     def __str__(self):
